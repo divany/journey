@@ -24,6 +24,8 @@ var ExchangeRates = (function () {
         var self = this;
         $.ajax({
             url: self.url(),
+            type: 'GET',
+            crossDomain: true,
             dataType: 'xml',
             success: function (xml) {
                 $(xml).find('Record').each(function () {
