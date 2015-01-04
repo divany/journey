@@ -17,13 +17,16 @@ var ExchangeRates = (function () {
         var year = date.getFullYear();
         return day + "/" + month + "/" + year;
     };
+    ExchangeRates.proxyUrl = function (url) {
+        return "https://jsonp.nodejitsu.com/?url=" + encodeURIComponent(url) + "&raw=true";
+    };
     ExchangeRates.prototype.url = function () {
-        return "http://www.corsproxy.com/www.cbr.ru/scripts/XML_dynamic.asp?date_req1=22/06/2014&date_req2=" + ExchangeRates.today() + "&VAL_NM_RQ=" + this.code;
+        return "http://www.cbr.ru/scripts/XML_dynamic.asp?date_req1=22/06/2014&date_req2=" + ExchangeRates.today() + "&VAL_NM_RQ=" + this.code;
     };
     ExchangeRates.prototype.fetch = function () {
         var self = this;
         $.ajax({
-            url: self.url(),
+            url: ExchangeRates.proxyUrl(self.url()),
             type: 'GET',
             crossDomain: true,
             dataType: 'xml',
@@ -65,9 +68,9 @@ var Journey = (function () {
         this.longitudes[date] = longitudes;
     };
     Journey.prototype.init = function () {
-        var mapPosition = new google.maps.LatLng(61.4108, 49.322);
+        var mapPosition = new google.maps.LatLng(46.6478, 34.2797);
         var mapOptions = {
-            zoom: 4,
+            zoom: 12,
             center: mapPosition,
             mapTypeId: google.maps.MapTypeId.TERRAIN
         };
@@ -79,6 +82,7 @@ var Journey = (function () {
         (new USD(this.addLongitudes.bind(this), this.update.bind(this))).fetch();
     };
     Journey.prototype.update = function () {
+        var line = [];
         for (var label in this.latitudes) {
             if (this.longitudes[label] != undefined) {
                 var lat = this.latitudes[label];
@@ -90,6 +94,7 @@ var Journey = (function () {
                     map: this.map,
                     title: contentString
                 });
+                line.push(location);
                 var self = this;
                 google.maps.event.addListener(marker, "click", function (e) {
                     var infowindow = new google.maps.InfoWindow({
@@ -98,6 +103,16 @@ var Journey = (function () {
                     infowindow.open(self.map, this);
                 });
             }
+        }
+        if (line.length > 0) {
+            var flightPath = new google.maps.Polyline({
+                path: line,
+                geodesic: true,
+                strokeColor: '#FF0000',
+                strokeOpacity: 1.0,
+                strokeWeight: 2
+            });
+            flightPath.setMap(this.map);
         }
     };
     return Journey;

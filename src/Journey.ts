@@ -40,15 +40,19 @@ class ExchangeRates {
         return day + "/" + month + "/" + year;
     }
 
+    static proxyUrl(url){
+        return "https://jsonp.nodejitsu.com/?url=" + encodeURIComponent(url) + "&raw=true";
+    }
+
     url() {
         // TODO: make from and to dates configurable
-        return "http://www.corsproxy.com/www.cbr.ru/scripts/XML_dynamic.asp?date_req1=22/06/2014&date_req2=" + ExchangeRates.today() + "&VAL_NM_RQ=" + this.code;
+        return "http://www.cbr.ru/scripts/XML_dynamic.asp?date_req1=22/06/2014&date_req2=" + ExchangeRates.today() + "&VAL_NM_RQ=" + this.code;
     }
 
     fetch() {
         var self: ExchangeRates = this;
         $.ajax({
-            url: self.url(),
+            url: ExchangeRates.proxyUrl(self.url()),
             type: 'GET',
             crossDomain: true,
             dataType: 'xml',
@@ -92,9 +96,9 @@ class Journey {
     }
 
     init() {
-        var mapPosition = new google.maps.LatLng(61.4108, 49.322);
+        var mapPosition = new google.maps.LatLng(46.6478, 34.2797);
         var mapOptions = {
-            zoom: 4,
+            zoom: 12,
             center: mapPosition,
             mapTypeId: google.maps.MapTypeId.TERRAIN
         };
@@ -109,6 +113,7 @@ class Journey {
     }
 
     update() {
+        var line = []
         for (var label in this.latitudes) {
             if (this.longitudes[label] != undefined) {
                 var lat = this.latitudes[label];
@@ -120,7 +125,7 @@ class Journey {
                     map: this.map,
                     title: contentString
                 });
-
+                line.push(location);
                 var self = this;
                 google.maps.event.addListener(marker, "click", function (e) {
                     var infowindow = new google.maps.InfoWindow({
@@ -130,6 +135,16 @@ class Journey {
                     infowindow.open(self.map, this)
                 });
             }
+        }
+        if (line.length > 0) {
+            var flightPath = new google.maps.Polyline({
+                path: line,
+                geodesic: true,
+                strokeColor: '#FF0000',
+                strokeOpacity: 1.0,
+                strokeWeight: 2
+            });
+            flightPath.setMap(this.map);
         }
     }
 }
