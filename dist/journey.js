@@ -18,7 +18,7 @@ var ExchangeRates = (function () {
         return day + "/" + month + "/" + year;
     };
     ExchangeRates.prototype.url = function () {
-        return "http://www.cbr.ru/scripts/XML_dynamic.asp?date_req1=22/06/2014&date_req2=" + ExchangeRates.today() + "&VAL_NM_RQ=" + this.code;
+        return "http://www.corsproxy.com/www.cbr.ru/scripts/XML_dynamic.asp?date_req1=22/06/2014&date_req2=" + ExchangeRates.today() + "&VAL_NM_RQ=" + this.code;
     };
     ExchangeRates.prototype.fetch = function () {
         var self = this;

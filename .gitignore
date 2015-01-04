@@ -2,3 +2,5 @@
 .tscache
 node_modules/
 typings/
+src/*.js
+src/*.js.map

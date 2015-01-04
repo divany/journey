@@ -42,7 +42,7 @@ class ExchangeRates {
 
     url() {
         // TODO: make from and to dates configurable
-        return "http://www.cbr.ru/scripts/XML_dynamic.asp?date_req1=22/06/2014&date_req2=" + ExchangeRates.today() + "&VAL_NM_RQ=" + this.code;
+        return "http://www.corsproxy.com/www.cbr.ru/scripts/XML_dynamic.asp?date_req1=22/06/2014&date_req2=" + ExchangeRates.today() + "&VAL_NM_RQ=" + this.code;
     }
 
     fetch() {
