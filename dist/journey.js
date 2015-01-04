@@ -88,7 +88,7 @@ var Journey = (function () {
                 var lat = this.latitudes[label];
                 var long = this.longitudes[label];
                 var location = new google.maps.LatLng(lat, long);
-                var contentString = "<h2>" + label + "</h2>USD: " + lat + "<br />EUR: " + long;
+                var contentString = "<h2>" + label + "</h2>USD: " + long + "<br />EUR: " + lat;
                 var marker = new google.maps.Marker({
                     position: location,
                     map: this.map,
